@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:microblogging/register.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -165,6 +167,10 @@ class _LoginPageState extends State<LoginPage> {
                         TextButton(
                           onPressed: () {
                             // Navigate to sign-up page
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) =>  RegistrationScreen()),
+                            );
                             print('Sign-Up button pressed');
                           },
                           child: const Text('Sign-up'),

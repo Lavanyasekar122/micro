@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:microblogging/login.dart';
 
 void main() => runApp(MyApp());
-get
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: RegistrationScreen(),
+      routes: {
+        '/login': (context) => LoginPage(), // Placeholder for login screen
+      },
     );
   }
 }
@@ -31,40 +35,51 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
+    final username = _usernameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
     setState(() {
       _isLoading = true;
     });
 
-    final response = await http.post(
-      Uri.parse('http://localhost/test/register.php'), // Replace with your PHP API URL
-      body: {
-        'username': username,
-        'email': email,
-        'password': password,
-      },
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost/test/register.php'), // Replace with your PHP API URL
+        body: {
+          'username': username,
+          'email': email,
+          'password': password,
+        },
+      );
 
-    setState(() {
-      _isLoading = false;
-    });
+      setState(() {
+        _isLoading = false;
+      });
 
-    if (response.statusCode == 200) {
-      final message = response.body;
+      if (response.statusCode == 200) {
+        final message = response.body;
 
-      if (message.contains('Email already registered')) {
-        _showSnackBar('Email already registered. Please log in.');
-      } else if (message.contains('All fields are required')) {
-        _showSnackBar('All fields are required.');
-      } else if (message.contains('Invalid email format')) {
-        _showSnackBar('Invalid email format.');
-      } else if (response.body.contains('Error')) {
-        _showSnackBar('Registration failed. Please try again.');
+        if (message.contains('Email already registered')) {
+          _showSnackBar('Email already registered. Please log in.');
+        } else if (message.contains('All fields are required')) {
+          _showSnackBar('All fields are required.');
+        } else if (message.contains('Invalid email format')) {
+          _showSnackBar('Invalid email format.');
+        } else if (message.contains('Error')) {
+          _showSnackBar('Registration failed. Please try again.');
+        } else {
+          _showSnackBar('Registration successful!');
+          Navigator.pushReplacementNamed(context, '/login');
+        }
       } else {
-        _showSnackBar('Registration successful!');
-        Navigator.pushReplacementNamed(context, '/login'); // Define login route
+        _showSnackBar('Server error. Please try again later.');
       }
-    } else {
-      _showSnackBar('Server error. Please try again later.');
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showSnackBar('Error connecting to the server: $e');
     }
   }
 
@@ -78,7 +93,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -88,7 +103,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             children: [
               TextFormField(
                 controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Username'),
+                decoration: const InputDecoration(labelText: 'Username'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your username.';
@@ -98,7 +113,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -112,7 +127,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -124,12 +139,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _isLoading
-                  ? CircularProgressIndicator()
+                  ? const CircularProgressIndicator()
                   : ElevatedButton(
                 onPressed: _register,
-                child: Text('Register'),
+                child: const Text('Register'),
               ),
             ],
           ),

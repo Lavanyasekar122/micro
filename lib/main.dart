@@ -7,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key}); // Updated to use super parameter
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key}); // Updated to use super parameter
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'asserts/logo.jpg', // Place the image in the assets folder
+              'assets/logo.jpg', // Corrected 'asserts' to 'assets'
               width: 200,
               height: 200,
             ),
