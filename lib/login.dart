@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:microblogging/constant.dart';
 import 'dart:convert';
 
 import 'package:microblogging/register.dart';
@@ -37,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       final usernameOrEmail = _usernameOrEmailController.text.trim();
       final password = _passwordController.text.trim();
 
-      final url = Uri.parse('http://localhost/test/login.php');
+      final url = Uri.parse('$baseurl/test/login.php');
       try {
         final response = await http.post(
           url,
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const CircleAvatar(
-                      backgroundImage: AssetImage('assets/panda_top.png'),
+                      backgroundImage: AssetImage('asserts/logo2.jpg'),
                       radius: 50,
                     ),
                     const SizedBox(height: 20),
@@ -178,10 +179,6 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const CircleAvatar(
-                      backgroundImage: AssetImage('assets/panda_bottom.png'),
-                      radius: 50,
-                    ),
                   ],
                 ),
               ),

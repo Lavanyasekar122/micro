@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:microblogging/constant.dart';
 import 'package:microblogging/login.dart';
 
 void main() => runApp(MyApp());
@@ -45,7 +46,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost/test/register.php'), // Replace with your PHP API URL
+        Uri.parse('$baseurl/test/register.php'), // Replace with your PHP API URL
         body: {
           'username': username,
           'email': email,
